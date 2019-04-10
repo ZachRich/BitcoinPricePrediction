@@ -1,12 +1,7 @@
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt   #Data visualisation libraries
-import sklearn.svm
-import datetime
+
 import csv
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
 
 # Importing Data
 
@@ -42,17 +37,33 @@ with open(path) as csv_file:  # Reading in data from CSV
         X.append([row[0], row[1], row[2], row[3]])
         y.append(row[4])
 
-# Make sure to specify test_size also
-X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                    train_size=0.75,
-                                                    test_size=0.25)
+# Fitting Linear Regression to the dataset
+from sklearn.linear_model import LinearRegression
 
-# Create a Gaussian Classifier
+lin_reg = LinearRegression()
+lin_reg.fit(X, y)
 
-clf = RandomForestClassifier(n_estimators=100)
+# Fitting Polynomial Regression to the dataset
+from sklearn.preprocessing import PolynomialFeatures
 
-# Train model using the training sets y_pred=clf.predict(X_test)
+poly_reg = PolynomialFeatures(degree=4)
+X_poly = poly_reg.fit_transform(X)
 
-clf.fit(X_test, y_train)
+lin_reg2 = LinearRegression()
+lin_reg2.fit(X_poly, y)
 
-y_pred = clf.predict(X_test)
+# Visualizaing the Linear Regression Results
+plt.scatter(X, y, color='red')  # Plots the actual data
+plt.plot(X, lin_reg.predict(X), color='blue')  # Plots the predicted data
+plt.title('Truth or Bluff (Linear Regresion)')
+plt.xlabel('Position Level')
+plt.ylabel('Salary')
+plt.show()
+
+# Visualizing the Polynomial Regression Results
+plt.scatter(X, y, color='red')  # Plots the actual data
+plt.plot(X, lin_reg2.predict(X_poly), color='blue')  # Predicted data
+plt.title('Truth or Bluff(Polynomial Regression, degree 4)')
+plt.xlabel('Posiiton Level')
+plt.ylabel('Salary')
+plt.show()
