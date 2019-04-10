@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt   #Data visualisation libraries
 import sklearn.svm
 import datetime
 import csv
-import sklearn.cross_validation
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
 # Importing Data
 
@@ -46,5 +47,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                     train_size=0.75,
                                                     test_size=0.25)
 
-print(X_train)
+# Create a Gaussian Classifier
 
+clf = RandomForestClassifier(n_estimators=100)
+
+# Train model using the training sets y_pred=clf.predict(X_test)
+
+clf.fit(X_test, y_train)
+
+y_pred = clf.predict(X_test)
