@@ -1,26 +1,27 @@
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt   #Data visualisation libraries 
-import seaborn as sns
-from sklearn.svm import SVR
+import matplotlib.pyplot as plt   #Data visualisation libraries
+import sklearn.svm
 import datetime
 import csv
+import sklearn.cross_validation
 
-
-#Importing Data
+# Importing Data
 
 path = '/Users/zacharyrich/Desktop/bitcoin_cash_price.csv'
 
-with open(path) as csv_file:
+X = []
+y = []
+
+with open(path) as csv_file:  # Reading in data from CSV
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
-        tempRow = row[0].split(",")
+        tempRow = row[0].split(",")  # Splitting data by ","
         DOW = tempRow[0]
 
-
-        if DOW == 'Sunday':
+        if DOW == 'Sunday':  # 0-6 for days of the week starting at Sunday
             DOW = 0
         elif DOW == 'Monday':
             DOW = 1
@@ -35,15 +36,15 @@ with open(path) as csv_file:
         elif DOW == 'Saturday':
             DOW = 6
 
-        print(DOW)
-    
+        row[0] = DOW  # Replacing dates with Quantifiers
 
+        X.append([row[0], row[1], row[2], row[3]])
+        y.append(row[4])
 
-data.dropna
+# Make sure to specify test_size also
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    train_size=0.75,
+                                                    test_size=0.25)
 
-data.head()
-data.info()
-data.describe()
+print(X_train)
 
-X = data[['Date', 'Open', 'High', 'Low']]
-y = data['Close']
