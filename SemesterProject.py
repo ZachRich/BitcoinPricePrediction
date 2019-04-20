@@ -4,69 +4,111 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
 
-path = '/Users/zacharyrich/Desktop/bitcoin_price.csv'
-
-dataset = pd.read_csv(path)
-
-# Replace Days of week with their Numbers
-replacements = {
-    'Sunday': 0,
-    'Monday': 1,
-    'Tuesday': 2,
-    'Wednesday': 3,
-    'Thursday': 4,
-    'Friday': 5,
-    'Saturday': 6
-}
-
-dataset.replace(replacements, inplace=True, )
-
-X = dataset.iloc[:, 2:3].values
-y = dataset.iloc[:, -1].values
 
 # Importing the dataset
 dataset = pd.read_csv('bitcoin_price.csv')
-X = dataset.iloc[:, 3:4].values
-y = dataset.iloc[:, -1].values
 
-# Fitting Linear Regression to the dataset
-from sklearn.linear_model import LinearRegression
+# Splitting Dataset
+X_Open = dataset.iloc[:, 3:4].values
 
-lin_reg = LinearRegression()
-lin_reg.fit(X, y)
+y_High = dataset.iloc[:, 1:2].values
 
-# Fitting Polynomial Regression to the dataset
-from sklearn.preprocessing import PolynomialFeatures
+y_low = dataset.iloc[:, 2:3].values
 
-poly_reg = PolynomialFeatures(degree=3)
-X_poly = poly_reg.fit_transform(X)
+y_close = dataset.iloc[:, -1].values
 
-lin_reg2 = LinearRegression()
-lin_reg2.fit(X_poly, y)
 
-# Visualizaing the Linear Regression Results
-plt.scatter(X, y, color='red')  # Plots the actual data
-plt.plot(X, lin_reg.predict(X), color='blue')  # Plots the predicted data
-plt.title('Close price using open(Linear Regresion)')
-plt.xlabel('Open')
-plt.ylabel('Close')
-plt.show()
+def linear_prediction(open_price):
+    testClosePrice = 7144.38
+    # Fitting Linear Regression to the dataset
 
-# Visualizing the Polynomial Regression Results
-plt.scatter(X, y, color='red')  # Plots the actual data
-plt.plot(X, lin_reg2.predict(X_poly), color='blue')  # Predicted data
-plt.title('Close price using open(Polynomial Regression, degree 4)')
-plt.xlabel('Open')
-plt.ylabel('Close')
-plt.show()
+    lin_reg_open = LinearRegression()
+    lin_reg_open.fit(X_Open, y_close)
 
-# Improving the Visualizing the Polynomial Regression Result
-X_grid = np.arange(min(X), max(X), 0.1)
-X_grid = X_grid.reshape(len(X_grid), 1)
-plt.scatter(X, y, color='red')  # Plots the actual data
-plt.plot(X_grid, lin_reg2.predict(poly_reg.fit_transform(X_grid)), color='blue')  # Predicted data
-plt.title('Close price using open(Polynomial Regression, degree 4 Continuous Curve)')
-plt.xlabel('Open')
-plt.ylabel('Close')
-plt.show()
+    lin_reg_high = LinearRegression()
+    lin_reg_high.fit(X_Open, y_High)
+
+    lin_reg_low = LinearRegression()
+    lin_reg_low.fit(X_Open, y_low)
+
+    # Linear Predictions
+    x_test_high = np.array(open_price)
+    pred_high = lin_reg_high.predict(x_test_high.reshape(1, -1))  # High
+
+    x_test_low = np.array(open_price)
+    pred_low = lin_reg_low.predict(x_test_low.reshape(1, -1))  # Low
+
+    x_test = np.array((open_price + pred_high + pred_low) / 3)  # Open
+    y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
+
+    error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
+
+    return open_price, pred_high, pred_low, y_pred, error
+
+    # print("Linear Regression")
+    #
+    # print("Open Price:", open_price)
+    #
+    # print("Predicted High Price: ", pred_high)
+    #
+    # print("Predicted Low Price: ", pred_low)
+    #
+    # print("Predicted Close Price: ", y_pred)
+    #
+    # print("Percent Error: ", error)
+
+
+# def polynomial_prediction(open_price):
+#
+#     testClosePrice = 7144.38
+#
+#     #Fitting polynomial Regression to dataset
+#
+#     poly_high = PolynomialFeatures(degree=4)
+#     X_poly_high = poly_high.fit_transform(X_Open)
+#     poly_high.fit(X_poly_high, y_High)
+#     lin_reg_high = LinearRegression()
+#     lin_reg_high.fit(X_poly_high, y_High)
+#
+#     poly_low = PolynomialFeatures(degree=4)
+#     X_poly_low = poly_low.fit_transform(X_Open)
+#     poly_low.fit(X_poly_low, y_low)
+#     lin_reg_low = LinearRegression()
+#     lin_reg_low.fit(X_poly_low, y_low)
+#
+#     poly_open = PolynomialFeatures(degree=4)
+#     X_poly_open = poly_open.fit_transform(X_Open)
+#     poly_open.fit(X_poly_open, y_close)
+#     lin_reg_open = LinearRegression()
+#     lin_reg_open.fit(X_poly_open, y_close)
+#
+#
+#     #Polynomial Predictions
+#     x_test_high = np.array(open_price)
+#     pred_high = lin_reg_high.predict(x_test_high.reshape(1, -1))  # High
+#
+#     x_test_low = np.array(open_price)
+#     pred_low = lin_reg_low.predict(x_test_low.reshape(1, -1))  # Low
+#
+#     x_test = np.array((open_price + pred_low + pred_high) / 3)  # Open
+#     y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
+#
+#     error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
+#
+#     print("Polynomial Predictions")
+#
+#     print("Open Price:", open_price)
+#
+#     print("Predicted High Price: ", pred_high)
+#
+#     print("Predicted Low Price: ", pred_low)
+#
+#     print("Predicted Close Price: ", y_pred)
+#
+#     print("Percent Error: ", error)
+
+
+linear_prediction(7023.1)
