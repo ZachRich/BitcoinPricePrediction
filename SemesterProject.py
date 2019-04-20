@@ -1,15 +1,9 @@
 # Bitcoin Price prediction with Polynomial Regression
 
-# Imports
-from matplotlib import pyplot as plt
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn import linear_model
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.svm import SVR
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import accuracy_score
 
 path = '/Users/zacharyrich/Desktop/bitcoin_price.csv'
 
@@ -28,43 +22,51 @@ replacements = {
 
 dataset.replace(replacements, inplace=True, )
 
-plt.scatter(dataset.iloc[:, 0:1].values, dataset.iloc[:, 3:4].values, color='green')  # Plots the actual data
-plt.title('Day Of the Week + Close Price')
-plt.xlabel('Day of the week')
-plt.ylabel('Close Price')
-plt.show()
+X = dataset.iloc[:, 2:3].values
+y = dataset.iloc[:, -1].values
 
-plt.scatter(dataset.iloc[:, 1:2].values, dataset.iloc[:, 3:4].values, color='red')  # Plots the actual data
-plt.title('High + Close Price')
-plt.xlabel('High Price')
-plt.ylabel('Close Price')
-plt.show()
+# Importing the dataset
+dataset = pd.read_csv('bitcoin_price.csv')
+X = dataset.iloc[:, 3:4].values
+y = dataset.iloc[:, -1].values
 
-plt.scatter(dataset.iloc[:, 2:3].values, dataset.iloc[:, 3:4].values, color='blue')  # Plots the actual data
-plt.title('Low + Close Price')
-plt.xlabel('Low Price')
-plt.ylabel('Close Price')
-plt.show()
+# Fitting Linear Regression to the dataset
+from sklearn.linear_model import LinearRegression
 
-
-X = dataset.iloc[:, :-1].values
-y = dataset.iloc[:, 3:4].values
-
-from sklearn.model_selection import train_test_split
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-
+lin_reg = LinearRegression()
+lin_reg.fit(X, y)
 
 # Fitting Polynomial Regression to the dataset
 from sklearn.preprocessing import PolynomialFeatures
 
-poly_reg = PolynomialFeatures(degree=4)
-X_poly = poly_reg.fit_transform(X_train)
+poly_reg = PolynomialFeatures(degree=3)
+X_poly = poly_reg.fit_transform(X)
 
 lin_reg2 = LinearRegression()
-lin_reg2.fit(X_poly, y_train)
+lin_reg2.fit(X_poly, y)
 
-y_pred = lin_reg2.predict(X_poly)
+# Visualizaing the Linear Regression Results
+plt.scatter(X, y, color='red')  # Plots the actual data
+plt.plot(X, lin_reg.predict(X), color='blue')  # Plots the predicted data
+plt.title('Close price using open(Linear Regresion)')
+plt.xlabel('Open')
+plt.ylabel('Close')
+plt.show()
 
-confidence = lin_reg2.score(X_test, y_test)
-print("confidence: ", confidence)
+# Visualizing the Polynomial Regression Results
+plt.scatter(X, y, color='red')  # Plots the actual data
+plt.plot(X, lin_reg2.predict(X_poly), color='blue')  # Predicted data
+plt.title('Close price using open(Polynomial Regression, degree 4)')
+plt.xlabel('Open')
+plt.ylabel('Close')
+plt.show()
+
+# Improving the Visualizing the Polynomial Regression Results
+X_grid = np.arange(min(X), max(X), 0.1)
+X_grid = X_grid.reshape(len(X_grid), 1)
+plt.scatter(X, y, color='red')  # Plots the actual data
+plt.plot(X_grid, lin_reg2.predict(poly_reg.fit_transform(X_grid)), color='blue')  # Predicted data
+plt.title('Close price using open(Polynomial Regression, degree 4 Continuous Curve)')
+plt.xlabel('Open')
+plt.ylabel('Close')
+plt.show()
