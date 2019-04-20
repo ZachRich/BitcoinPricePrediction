@@ -61,7 +61,7 @@ plt.xlabel('Open')
 plt.ylabel('Close')
 plt.show()
 
-# Improving the Visualizing the Polynomial Regression Results
+# Improving the Visualizing the Polynomial Regression Result
 X_grid = np.arange(min(X), max(X), 0.1)
 X_grid = X_grid.reshape(len(X_grid), 1)
 plt.scatter(X, y, color='red')  # Plots the actual data
