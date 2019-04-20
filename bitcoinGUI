@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr 20 15:10:58 2019
+
+@author: ariakieras
+"""
+
+from tkinter import *
+
+master = Tk()
+master.title("Bitcoin Price Predictor")
+
+Label(master, text="Open Price:").grid(row=0)
+Label(master, text="High Price Prediction:").grid(row=1)
+Label(master, text="Low Price Prediction:").grid(row=2)
+Label(master, text="Close Price Prediction:").grid(row=3)
+Label(master, text="Percent Error(%):").grid(row=4)
+
+#user input for open price
+e1 = Entry(master)
+e1.grid(row=0, column=1)
+
+#where predicted prices will display
+K = Entry(master, state=DISABLED)
+K.grid(row=1, column=1)
+Cn = Entry(master, state=DISABLED)
+Cn.grid(row=2, column=1)
+D = Entry(master, state=DISABLED)
+D.grid(row=3, column=1)
+G = Entry(master, state=DISABLED)
+G.grid(row=4, column=1)
+
+#def calc(K, Cn):
+#    # get the user input as floats
+#    C0 = float(e1.get())
+#    p = float(e2.get())
+#    n = float(e3.get())
+#    # < put your input validation here >
+#
+#    #Amount of interest for repayment:
+#    K.configure(state=NORMAL) # make the field editable
+#    K.delete(0, 'end') # remove old content
+#    K.insert(0, str((C0 * p * n) / 100)) # write new content
+#    K.configure(state=DISABLED) # make the field read only
+#
+#    #Final Debt Amount:
+#    Cn.configure(state=NORMAL) # make the field editable
+#    Cn.delete(0, 'end') # remove old content
+#    Cn.insert(0, str(C0 * (1 + (p * n) / 100))) # write new content
+#    Cn.configure(state=DISABLED) # make the field read only
+
+
+#Button(master, text='Quit', command=master.quit).grid(row=5, column=0, sticky=E, pady=4)
+Button(master, text='Linear Regression', command=lambda: calc(K, Cn)).grid(row=6, column=0, sticky=W, pady=4)
+Button(master, text='Non-Linear Regression', command=lambda: calc(K, Cn)).grid(row=7, column=0, sticky=W, pady=4)
+
+mainloop()
