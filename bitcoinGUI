@@ -51,7 +51,8 @@ G.grid(row=4, column=1)
 #    Cn.configure(state=DISABLED) # make the field read only
 
 
-Button(master, text='Quit', command=master.quit).grid(row=5, column=0, sticky=E, pady=4)
-Button(master, text='Show', command=lambda: calc(K, Cn)).grid(row=5, column=1, sticky=W, pady=4)
+#Button(master, text='Quit', command=master.quit).grid(row=5, column=0, sticky=E, pady=4)
+Button(master, text='Linear Regression', command=lambda: calc(K, Cn)).grid(row=6, column=0, sticky=W, pady=4)
+Button(master, text='Non-Linear Regression', command=lambda: calc(K, Cn)).grid(row=7, column=0, sticky=W, pady=4)
 
 mainloop()
