@@ -32,8 +32,8 @@ v3.grid(row=3, column=1)
 v4 = Entry(master, state=DISABLED)
 v4.grid(row=4, column=1)
 
-v5 = Entry(master, state=DISABLED)
-v5.grid(row=5, column=1)
+#v5 = Entry(master, state=DISABLED)
+#v5.grid(row=5, column=1)
 
 
 # Importing the dataset
@@ -49,9 +49,40 @@ y_low = dataset.iloc[:, 2:3].values
 y_close = dataset.iloc[:, -1].values
 
 
-def linear_prediction(open_price):
+#def linear_prediction(open_price):
+#    testClosePrice = 7144.38
+#    # Fitting Linear Regression to the dataset
+#
+#    lin_reg_open = LinearRegression()
+#    lin_reg_open.fit(X_Open, y_close)
+#
+#    lin_reg_high = LinearRegression()
+#    lin_reg_high.fit(X_Open, y_High)
+#
+#    lin_reg_low = LinearRegression()
+#    lin_reg_low.fit(X_Open, y_low)
+#
+#    # Linear Predictions
+#    x_test_high = np.array(open_price)
+#    pred_high = lin_reg_high.predict(x_test_high.reshape(1, -1))  # High
+#
+#    x_test_low = np.array(open_price)
+#    pred_low = lin_reg_low.predict(x_test_low.reshape(1, -1))  # Low
+#
+#    x_test = np.array((open_price + pred_high + pred_low) / 3)  # Open
+#    y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
+#
+#    error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
+#    
+#    
+#
+#    return open_price, pred_high, pred_low, y_pred, error
+
+def linRegButton(open_price):
+    
+    enteredByUser = float(e1.get())
     testClosePrice = 7144.38
-    # Fitting Linear Regression to the dataset
+     # Fitting Linear Regression to the dataset
 
     lin_reg_open = LinearRegression()
     lin_reg_open.fit(X_Open, y_close)
@@ -61,26 +92,20 @@ def linear_prediction(open_price):
 
     lin_reg_low = LinearRegression()
     lin_reg_low.fit(X_Open, y_low)
-
+    
     # Linear Predictions
-    x_test_high = np.array(open_price)
+    x_test_high = np.array(enteredByUser)
     pred_high = lin_reg_high.predict(x_test_high.reshape(1, -1))  # High
 
-    x_test_low = np.array(open_price)
+    x_test_low = np.array(enteredByUser)
     pred_low = lin_reg_low.predict(x_test_low.reshape(1, -1))  # Low
 
-    x_test = np.array((open_price + pred_high + pred_low) / 3)  # Open
+    x_test = np.array((enteredByUser + pred_high + pred_low) / 3)  # Open
     y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
 
     error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
     
     
-
-    return open_price, pred_high, pred_low, y_pred, error
-
-def linRegButton(linear_prediction, open_price, pred_high, pred_low, y_pred, error):
-    linear_prediction(*open_price, pred_high, pred_low, y_pred, error)
-   
     #showing entered open price
     v1.configure(state=NORMAL)
     v2.delete(0,'end')
@@ -132,7 +157,7 @@ def linRegButton(linear_prediction, open_price, pred_high, pred_low, y_pred, err
 
 
 #Button(master, text='Quit', command=master.quit).grid(row=5, column=0, sticky=E, pady=4)
-Button(master, text='Linear Regression', command=lambda: linRegButton(e1, v1, v2, v3, v4)).grid(row=6, column=0, sticky=W, pady=4)
+Button(master, text='Linear Regression', command=lambda: linRegButton(e1)).grid(row=6, column=0, sticky=W, pady=4)
 Button(master, text='Non-Linear Regression', command=lambda: calc(K, Cn)).grid(row=7, column=0, sticky=W, pady=4)
 
 mainloop()
