@@ -13,7 +13,7 @@ Label(master, text="Open Price:").grid(row=0)
 Label(master, text="High Price Prediction:").grid(row=1)
 Label(master, text="Low Price Prediction:").grid(row=2)
 Label(master, text="Close Price Prediction:").grid(row=3)
-Label(master, text="Percent Error(%):").grid(row=4)
+#Label(master, text="Percent Error(%):").grid(row=4)
 
 #user input for open price
 e1 = Entry(master)
@@ -29,8 +29,8 @@ v2.grid(row=2, column=1)
 v3 = Entry(master, state=DISABLED)
 v3.grid(row=3, column=1)
 
-v4 = Entry(master, state=DISABLED)
-v4.grid(row=4, column=1)
+#v4 = Entry(master, state=DISABLED)
+#v4.grid(row=4, column=1)
 
 #v5 = Entry(master, state=DISABLED)
 #v5.grid(row=5, column=1)
@@ -100,41 +100,41 @@ def linRegButton(open_price):
     x_test_low = np.array(enteredByUser)
     pred_low = lin_reg_low.predict(x_test_low.reshape(1, -1))  # Low
 
-    x_test = np.array((enteredByUser + pred_high + pred_low) / 3)  # Open
+    x_test = np.array((enteredByUser + pred_high + pred_low) / 3)  # Close
     y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
 
-    error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
+    #error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
     
     
     #showing entered open price
-    v1.configure(state=NORMAL)
-    v2.delete(0,'end')
-    v3.insert(0, str(open_price))
-    v4.configure(state=DISABLED)
+    e1.configure(state=NORMAL)
+    e1.delete(0,'end')
+    e1.insert(0, str(open_price))
+    e1.configure(state=DISABLED)
     
     #display high prediction
-    v2.configure(state=NORMAL)
-    v2.delete(0,'end')
-    v2.insert(0,str(pred_high))
-    v2.configure(state=DISABLED)
+    v1.configure(state=NORMAL)
+    v1.delete(0,'end')
+    v1.insert(0,str(pred_high))
+    v1.configure(state=DISABLED)
     
     #display low prediction
-    v3.configure(state=NORMAL)
-    v3.delete(0,'end')
-    v3.insert(0,str(pred_low))
-    v3.configure(state=DISABLED)
+    v2.configure(state=NORMAL)
+    v2.delete(0,'end')
+    v2.insert(0,str(pred_low))
+    v2.configure(state=DISABLED)
     
     #display close prediction
-    v4.configure(state=NORMAL)
-    v4.delete(0,'end')
-    v4.insert(0,str(y_pred))
-    v4.configure(state=DISABLED)
+    v3.configure(state=NORMAL)
+    v3.delete(0,'end')
+    v3.insert(0,str(y_pred))
+    v3.configure(state=DISABLED)
     
     #display error prediction
-    v5.configure(state=NORMAL)
-    v5.delete(0,'end')
-    v5.insert(0,str(error))
-    v5.configure(state=DISABLED)
+#    v4.configure(state=NORMAL)
+#    v4.delete(0,'end')
+#    v4.insert(0,str(error))
+#    v4.configure(state=DISABLED)
 
 #def calc(K, Cn):
 #    # get the user input as floats
@@ -158,6 +158,6 @@ def linRegButton(open_price):
 
 #Button(master, text='Quit', command=master.quit).grid(row=5, column=0, sticky=E, pady=4)
 Button(master, text='Linear Regression', command=lambda: linRegButton(e1)).grid(row=6, column=0, sticky=W, pady=4)
-Button(master, text='Non-Linear Regression', command=lambda: calc(K, Cn)).grid(row=7, column=0, sticky=W, pady=4)
+#Button(master, text='Non-Linear Regression', command=lambda: calc(K, Cn)).grid(row=7, column=0, sticky=W, pady=4)
 
 mainloop()
