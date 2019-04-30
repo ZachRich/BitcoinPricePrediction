@@ -18,7 +18,7 @@ y_low = dataset.iloc[:, 3:4].values  # Low Prices
 y_close = dataset.iloc[:, -1].values  # Close Prices
 
 def linear_prediction(open_price):
-
+    testClosePrice = 5140.38
     # Fitting Linear Regression to the dataset
     lin_reg_open = LinearRegression()
     lin_reg_open.fit(X_Open, y_close)
@@ -39,6 +39,7 @@ def linear_prediction(open_price):
     x_test = np.array((open_price + pred_high + pred_low) / 3)  # Open
     y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
 
+    error = (((testClosePrice - y_pred) / testClosePrice) * 100).__abs__()
 
     print("Linear Regression")
 
@@ -50,7 +51,9 @@ def linear_prediction(open_price):
 
     print("Predicted Close Price: ", y_pred)
 
-    return open_price, pred_high, pred_low, y_pred
+    print("Percent Error: ", error)
+
+    return open_price, pred_high, pred_low, y_pred, error
 
 
 linear_prediction(5140.38)
