@@ -30,24 +30,25 @@ v3.grid(row=3, column=1)
 
 
 # Importing the dataset
-dataset = pd.read_csv('bitcoin_price.csv')
+dataset = pd.read_csv('data.csv')
 
 # Splitting Dataset
-X_Open = dataset.iloc[:, 3:4].values
+X_Open = dataset.iloc[:, 1:2].values  # Open Prices
 
-y_High = dataset.iloc[:, 1:2].values
+y_High = dataset.iloc[:, 2:3].values  # High Prices
 
-y_low = dataset.iloc[:, 2:3].values
+y_low = dataset.iloc[:, 3:4].values  # Low Prices
 
-y_close = dataset.iloc[:, -1].values
+y_close = dataset.iloc[:, -1].values  # Close Prices
 
 
 def linRegButton(open_price):
     
-    enteredByUser = float(e1.get())
-    testClosePrice = 7144.38
+    open_price = float(e1.get())
+
      # Fitting Linear Regression to the dataset
 
+ # Fitting Linear Regression to the dataset
     lin_reg_open = LinearRegression()
     lin_reg_open.fit(X_Open, y_close)
 
@@ -56,15 +57,15 @@ def linRegButton(open_price):
 
     lin_reg_low = LinearRegression()
     lin_reg_low.fit(X_Open, y_low)
-    
+
     # Linear Predictions
-    x_test_high = np.array(enteredByUser)
+    x_test_high = np.array(open_price)
     pred_high = lin_reg_high.predict(x_test_high.reshape(1, -1))  # High
 
-    x_test_low = np.array(enteredByUser)
+    x_test_low = np.array(open_price)
     pred_low = lin_reg_low.predict(x_test_low.reshape(1, -1))  # Low
 
-    x_test = np.array((enteredByUser + pred_high + pred_low) / 3)  # Close
+    x_test = np.array((open_price + pred_high + pred_low) / 3)  # Open
     y_pred = lin_reg_open.predict(x_test.reshape(1, -1))
     
     #showing entered open price
